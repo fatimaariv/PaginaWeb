@@ -4,42 +4,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
-    <link rel="stylesheet" href="../estilos.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+
 </head>
 <body>
     <header>
         <div class="logo">
             <h1>OSOS</h1>
-            <img src="../ImagenesOSOS/oso.png" alt="Logo OSOS" />
+            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" />
         </div>
         
         <div class="menu">
             <nav>
                 <ul class="nav-menu">
-                    <li><a class="menu-button" href="../inicio.html">Inicio</a></li>
+                    <li><a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a></li>
 
                     <li class="dropdown">
-                    <a class="menu-button" href="#">Buscar reseñas</a>
-                        <div class="submenu">
-                            <a href="menuMaestro.html">Por maestro</a>
-                            <a href="menuMateria.html">Por materia</a>
-                        </div>
+                        <a class="menu-button" href="#">Buscar reseñas</a>
+                            <div class="submenu">
+                                <a href="{{ url_for('mostrar_maestros') }}">Por maestro</a>
+                                <a href="{{ url_for('mostrar_materias') }}">Por materia</a>
+                            </div>
                     </li>
                     <li class="dropdown">
                         <a class="menu-button" href="#">Agregar reseña</a>
-                        <div class="submenu">
-                        <a href="menuMaestro.html">Por maestro</a>
-                        <a href="menuMateria.html">Por materia</a>
-                        </div>
+                            <div class="submenu">
+                                <a href="{{ url_for('mostrar_maestros') }}">Por maestro</a>
+                                <a href="{{ url_for('mostrar_materias') }}">Por materia</a>
+                            </div>
                     </li>
-
                 </ul>
+
             </nav>
         </div>
     <a href="../inicioSesion.html" class="login-btn">Iniciar sesión</a>
     </header>
-
     <main>
+        <ul>
+            {% for materia in materias %}
+                <!-- materia ahora debe ser una tupla o dict con id y nombre, si no ajusta obtener_materias para que lo regrese -->
+                <li><a href="{{ url_for('reseñas_por_materia', idMateria=materia.idMateria) }}">{{ materia.nombreMateria }}</a></li>
+            {% endfor %}
+        </ul>
+
     </main>
 </body>
 </html>

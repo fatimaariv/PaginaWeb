@@ -2,8 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>OSOS</title>
+    <title>Reseñas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
 </head>
 <body>
@@ -38,14 +37,20 @@
         </div>
         <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
     </header>
-
     <main>
-        <h1>Lista de Maestros</h1>
-        <ul>
-            {% for maestro in maestros %}
-                <li><a href="{{ url_for('ver_resenas_maestro', nombre=maestro) }}">{{ maestro }}</a></li>
-            {% endfor %}
-        </ul>
+        <h1>Reseñas del maestro {{ nombre }}</h1>
+    <ul>
+        {% for comentario, calificacion, usuario, materia in resenas %}
+            <li>
+                <p><strong>{{ usuario }}</strong> en <em>{{ materia }}</em></p>
+                <p>{{ comentario }}</p>
+                <p>Calificación: {{ calificacion }} ⭐</p>
+            </li>
+        {% else %}
+            <p>No hay reseñas disponibles para este maestro aún.</p>
+        {% endfor %}
+    </ul>
     </main>
+    
 </body>
 </html>

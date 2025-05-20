@@ -127,6 +127,7 @@ nav a {
     color: #ddd;
     background: linear-gradient(180deg,#ffffff, #d6d6d0, hsl(15, 4%, 57%)); /* de dorado arriba a naranja abajo */
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 
 }
