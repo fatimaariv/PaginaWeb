@@ -27,29 +27,41 @@
                     <li class="dropdown">
                         <a class="menu-button" href="#">Agregar reseña</a>
                         <div class="submenu">
-                            <a href="{{ url_for('mostrar_maestros') }}">Por maestro</a>
-                            <a href="{{ url_for('mostrar_materias') }}">Por materia</a>
+                            <p>Necesitas iniciar sesión</p>
                         </div>
                     </li>
 
+                    
                 </ul>
             </nav>
         </div>
         <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
     </header>
     <main>
-        <h1>Reseñas del maestro {{ nombre }}</h1>
-    <ul>
-        {% for comentario, calificacion, usuario, materia in resenas %}
-            <li>
-                <p><strong>{{ usuario }}</strong> en <em>{{ materia }}</em></p>
-                <p>{{ comentario }}</p>
-                <p>Calificación: {{ calificacion }} ⭐</p>
-            </li>
-        {% else %}
-            <p>No hay reseñas disponibles para este maestro aún.</p>
-        {% endfor %}
-    </ul>
+        <h1 class="titlereseña">Reseñas del maestro: {{ nombre }}</h1>
+        
+        <div class="contenedor-resenas">
+        <ul class="lista-resenas">
+            {% for comentario, calificacion, usuario, materia in resenas %}
+                <li class="resena">
+                    <h3 class="resena-usuario">{{ usuario }}</h3>
+                    <p class="resena-meta"><strong>Materia:</strong> {{ materia }} | <strong>Profesor:</strong> Pancho Lopez Perez</p>
+                    <p class="resena-comentario">{{ comentario }}</p>
+                    <div class="resena-calificacion">
+                        {% for i in range(1, 6) %}
+                            <span class="estrella {% if i <= calificacion %}llena{% else %}vacia{% endif %}">★</span>
+                        {% endfor %}
+                        <span class="puntaje">({{ calificacion }}/5)</span>
+                    </div>
+                </li>
+            {% else %}
+                <p class="sin-resenas">No hay reseñas disponibles para este maestro aún.</p>
+            {% endfor %}
+        </ul>
+
+        <p class="texto-guia">En este apartado irá la reseña agregada por cada usuario...</p>
+    </div>
+</body>
     </main>
     
 </body>

@@ -97,6 +97,14 @@ header {
     background-color: #bbb;
 }
 
+.submenu p{
+    color: black;
+    padding: 12px 16px;
+    display: block;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .dropdown:hover .submenu {
     display: block;
 }
@@ -187,6 +195,120 @@ main h2{
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+.titlereseña{
+    margin: 20px 0;
+    margin-left: 100px;
+    font-size: 30px;
+    color: #bab5b5;
+}
+.contenedor-resenas {
+    background-color: #3c3016;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 20px 0;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.lista-resenas {
+    padding: 0;
+}
+
+.resena {
+    list-style: none;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.resena:last-child {
+    border-bottom: none;
+}
+
+.resena-usuario {
+    color: #e74c3c;
+    margin-bottom: 5px;
+}
+
+.resena-meta {
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.resena-comentario {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-left: 3px solid #e74c3c;
+}
+
+/* Estrellas de calificación */
+.resena-calificacion {
+    margin-top: 10px;
+}
+
+.estrella {
+    font-size: 1.2em;
+}
+
+.llena {
+    color: #f39c12;
+}
+
+.vacia {
+    color: #bdc3c7;
+}
+
+.puntaje {
+    margin-left: 5px;
+    font-size: 0.9em;
+}
+
+/* Estados especiales */
+.sin-resenas {
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+.texto-guia {
+    font-size: 0.9em;
+    color: #95a5a6;
+}
+
+/* BOTONES DEL MENU TANTO DE MAESTRO COMO DE MATERIAS */
+
+.contenedor-botones {
+    max-width: 300px;
+    margin: 20px;
+    margin-left: 100px;
+}
+
+.lista-maestros {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0; /* Quita el padding por defecto */
+    margin: 20px; /* Quita el margen por defecto */
+}
+
+/* Estilo minimalista (como en tu imagen) */
+.boton-minimalista {
+    display: block;
+    padding: 12px 5px;
+    color: #edebeb;
+    text-decoration: none;
+    border-bottom: 10px solid #2c1e00;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.boton-minimalista:hover {
+    background-color: #676666;
+}
+
+/* Opcional: elimina el borde del último elemento */
+.lista-maestros li:last-child .boton-minimalista {
+    border-bottom: none;
 }
 
 

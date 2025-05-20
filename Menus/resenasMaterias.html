@@ -27,8 +27,7 @@
                     <li class="dropdown">
                         <a class="menu-button" href="#">Agregar reseña</a>
                         <div class="submenu">
-                            <a href="{{ url_for('mostrar_maestros') }}">Por maestro</a>
-                            <a href="{{ url_for('mostrar_materias') }}">Por materia</a>
+                            <p>Necesitas iniciar sesión</p>
                         </div>
                     </li>
 
@@ -38,23 +37,35 @@
         <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
     </header>
     <main>
-        <h2>Reseñas para la materia: {{ nombre_materia }}</h2>
+        <h1 class="titlereseña">Reseñas para la materia: {{ nombre_materia }}</h1>
 
-        {% if reseñas %}
-            <ul>
-                {% for reseña in reseñas %}
-                    <li>
-                        <strong>Profesor:</strong> {{ reseña.nombreMaestro }}<br/>
-                        <strong>Usuario:</strong> {{ reseña.NomUsuario }}<br/>
-                        <strong>Calificación:</strong> {{ reseña.calificacion }} / 5<br/>
-                        <p>{{ reseña.comentario }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay reseñas para esta materia.</p>
-        {% endif %}
+    <div class="contenedor-resenas">
+    {% if reseñas %}
+        <ul class="lista-resenas">
+            {% for reseña in reseñas %}
+                <li class="resena">
+                    <h3 class="resena-usuario">{{ reseña.NomUsuario }}</h3>
+                    <p class="resena-meta">
+                        <strong>Materia:</strong> {{ reseña.materia }} | 
+                        <strong>Profesor:</strong> {{ reseña.nombreMaestro }}
+                    </p>
+                    <p class="resena-comentario">{{ reseña.comentario }}</p>
+                    <div class="resena-calificacion">
+                        {% for i in range(1, 6) %}
+                            <span class="estrella {% if i <= reseña.calificacion %}llena{% else %}vacia{% endif %}">★</span>
+                        {% endfor %}
+                        <span class="puntaje">({{ reseña.calificacion }}/5)</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="sin-resenas">No hay reseñas para esta materia.</p>
+    {% endif %}
+    <p class="texto-guia">En este apartado irá la reseña agregada por cada usuario...</p>
+</div>
     </main>
     
+
 </body>
 </html>
