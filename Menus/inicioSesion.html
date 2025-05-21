@@ -22,12 +22,16 @@
             </form>
         </div>
         <div class="form-container sign-in">
-            <form>
+            <form >
                 <h1>Iniciar Sesion</h1>
                 <input type="email" placeholder="Usuario">
                 <input type="password" placeholder="Contraseña">
                 <button>Iniciar Sesion</button>
-                <button><a href="{{ url_for('inicio') }}" class="boton-estilizado">Regresar al inicio</a></button>
+                <a href="{{ url_for('inicio') }}">
+                <button type="button">Regresar al inicio</button>
+                </a>
+
+
             </form>
         </div>
         <div class="toggle-container">

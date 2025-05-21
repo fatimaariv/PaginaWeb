@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>OSOS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>OSOS</h1>
+            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" />
+        </div>
+        
+        <div class="menu">
+            <nav>
+                <ul class="nav-menu">
+                    <li><a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a></li>
+
+                    <li class="dropdown">
+                        <a class="menu-button" href="#">Buscar reseñas</a>
+                        <div class="submenu">
+                            <a href="{{ url_for('mostrar_maestros') }}">Por maestro</a>
+                            <a href="{{ url_for('mostrar_materias') }}">Por materia</a>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a class="menu-button" href="#">Agregar reseña</a>
+                        <div class="submenu">
+                            <p>Necesitas iniciar sesión</p>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+    </header>
+
+    <main>
+        <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
+        <section class="resenas">
+            <h3>Buro de reseñas relevantes</h3>
+            <div class="tarjeta-resena">
+                <div class="resena-usuario">
+                    <span class="usuario">👤 riveraa</span>
+                    <span class="materia">Materia: Matematicas 2</span>
+                    <span class="profesor">Profesor: Pancho Lopez Perez</span>
+                </div>
+                <p class="texto-resena">En este apartado ira la reseña agregada por cada usuario............</p>
+                <div class="interaccion">
+                    <span class="likes">👍 10</span>
+                    <span class="calificacion">Calificación:
+                        <span class="estrellas">★★★★★</span>
+                    </span>
+                    <span class="alerta">❗</span>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
