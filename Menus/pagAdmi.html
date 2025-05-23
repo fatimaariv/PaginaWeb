@@ -16,7 +16,17 @@
         <div class="menu">
             <nav>
                 <ul class="nav-menu">
-                    <li><a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a></li>
+                    <li>
+                        {% if 'rol' in session %}
+                            {% if session['rol'] == 'Administrador' %}
+                            <a class="menu-button" href="{{ url_for('admin_dashboard') }}">Inicio</a>
+                            {% elif session['rol'] == 'Estudiante' %}
+                            <a class="menu-button" href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
+                        {% endif %}
+                        {% else %}
+                        <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
+                        {% endif %}
+                    </li>
 
                     <li class="dropdown">
                         <a class="menu-button" href="#">Buscar reseñas</a>
@@ -26,11 +36,9 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a class="menu-button" href="#">Agregar reseña</a>
-                        <div class="submenu">
-                            <p>Necesitas iniciar sesión</p>
-                        </div>
+                        <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
                     </li>
+    
                 </ul>
             </nav>
         </div>

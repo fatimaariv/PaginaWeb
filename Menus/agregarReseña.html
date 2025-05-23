@@ -36,12 +36,9 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a class="menu-button" href="#">Agregar reseña</a>
-                        <div class="submenu">
-                                <p>Necesitas iniciar sesión</p>
-                        </div>
+                        <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
                     </li>
-
+    
                 </ul>
             </nav>
         </div>
@@ -49,15 +46,7 @@
     </header>
 
     <main>
-        <h1 class="titlereseña">Reseñas por maestro</h1>
-    <div class="contenedor-botones"> <!-- Nuevo div contenedor -->
-        <ul class="lista-maestros">
-            {% for maestro in maestros %}
-                <li><a class="boton-minimalista" href="{{ url_for('ver_resenas_maestro', nombre=maestro) }}">{{ maestro }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    
+        
     </main>
 </body>
 </html>

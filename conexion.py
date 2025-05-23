@@ -1,7 +1,11 @@
 from flask import Flask, render_template, url_for
 import mysql.connector
+from flask import request, redirect, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, template_folder='Menus', static_folder='static')
+
+app.secret_key = 'clave_secreta_segura'  # Usa una más segura en producción
 
 # ------------------ FUNCIONES DE CONEXIÓN ------------------
 
@@ -80,6 +84,10 @@ def ver_resenas_maestro(nombre):
 def inicio():
     return render_template('inicio.html')
 
+@app.route('/agregar-resena')  # Define la URL de acceso (ej: /agregar-resena)
+def agregar_resena():
+    return render_template('agregarReseña.html')  # Renderiza el HTML
+
 @app.route('/materias')
 def mostrar_materias():
     materias = obtener_materias()
@@ -128,7 +136,91 @@ def test_template():
     except Exception as e:
         return f"Error cargando template: {str(e)}"
 
+@app.route('/login', methods=['POST'])
+def login_post():
+    username = request.form['username']
+    password = request.form['password']
+
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="f7t4m7DAR_",
+        database="PagWeb"
+    )
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT u.idUsuario, u.NomUsuario, u.contraseña, r.NomRol 
+        FROM usuarios u 
+        JOIN Roles r ON u.idRol = r.idRol 
+        WHERE u.NomUsuario = %s
+    """, (username,))
+    usuario = cursor.fetchone()
+    conexion.close()
+
+    if usuario and check_password_hash(usuario['contraseña'], password):
+        session['usuario'] = usuario['NomUsuario']
+        session['rol'] = usuario['NomRol']
+        if usuario['NomRol'] == 'Administrador':
+            return redirect('/admin')
+        else:
+            return redirect('/estudiante')
+    else:
+        flash("Usuario o contraseña incorrectos")
+        return redirect('/login')
+
+@app.route('/register', methods=['POST'])
+def register_post():
+    username = request.form['username']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+
+    if password != confirm_password:
+        flash("Las contraseñas no coinciden.")
+        return redirect('/login')
+
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="f7t4m7DAR_",
+        database="PagWeb"
+    )
+    cursor = conexion.cursor()
+
+    cursor.execute("SELECT * FROM usuarios WHERE NomUsuario = %s", (username,))
+    if cursor.fetchone():
+        flash("El nombre de usuario ya existe.")
+        conexion.close()
+        return redirect('/login')
+
+    # Obtener id del rol 'Estudiante'
+    cursor.execute("SELECT idRol FROM Roles WHERE NomRol = 'Estudiante'")
+    id_rol = cursor.fetchone()
+    if not id_rol:
+        flash("No existe el rol Estudiante en la base de datos.")
+        conexion.close()
+        return redirect('/login')
+
+    hashed_password = generate_password_hash(password)
+    cursor.execute(
+        "INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES (%s, %s, %s)",
+        (username, hashed_password, id_rol[0])
+    )
+    conexion.commit()
+    conexion.close()
+    flash("Registro exitoso, ahora puedes iniciar sesión.")
+    return redirect('/login')
+
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('pagAdmi.html')
+
+@app.route('/estudiante')
+def estudiante_dashboard():
+    return render_template('pagEstudiante.html')
+
+
 # ------------------ INICIO DEL SERVIDOR ------------------
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
