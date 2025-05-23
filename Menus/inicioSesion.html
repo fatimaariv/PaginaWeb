@@ -29,9 +29,22 @@
                 <button type="submit">Iniciar Sesion</button>
             </form>
             
-            <a class="inicio" href="{{ url_for('inicio') }}">
+            {% if 'rol' in session %}
+                {% if session['rol'] == 'Administrador' %}
+                    <a class="inicio" href="{{ url_for('admin_dashboard') }}">
+                        <button type="submit">Regrasar al inicio</button>
+                    </a>
+                {% elif session['rol'] == 'Estudiante' %}
+                    <a class="inicio" href="{{ url_for('estudiante_dashboard') }}">
+                        <button type="submit">Regrasar al inicio</button>
+                    </a>
+            {% endif %}
+            {% else %}
+                <a class="inicio" href="{{ url_for('inicio') }}">
                 <button type="submit">Regrasar al inicio</button>
-            </a>
+                </a>
+            {% endif %}
+            
         </div>
         <div class="toggle-container">
             <div class="toggle">
