@@ -218,6 +218,11 @@ def admin_dashboard():
 def estudiante_dashboard():
     return render_template('pagEstudiante.html')
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('inicio'))
+
 
 # ------------------ INICIO DEL SERVIDOR ------------------
 
