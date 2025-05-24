@@ -1,68 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Inicio Sesion</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inicio Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
 <body>
 
+    <!-- Mostrar mensajes flash -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flash-messages" style="color: red; list-style: none;">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form action="{{ url_for('register_post') }}" method="POST">
-                <h1>Registrate</h1>
-                <input type="text" name="username" placeholder="Nombre de usuario" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <input type="password" name="confirm_password" placeholder="Confirma tu contraseña" required>
+            <form id="formRegistro" action="{{ url_for('register_post') }}" method="POST">
+                <h1>Regístrate</h1>
+                <input type="text" name="username" placeholder="Nombre de usuario" required />
+                <input id="password" type="password" name="password" placeholder="Contraseña" required />
+                <input id="confirmPassword" type="password" name="confirm_password" placeholder="Confirma tu contraseña" required />
                 <button type="submit">Guardar datos</button>
+                <p id="errorMsg" style="color:red; display:none;">Las contraseñas no coinciden.</p>
             </form>
         </div>
+
         <div class="form-container sign-in">
             <form action="{{ url_for('login_post') }}" method="POST">
-                <h1>Iniciar Sesion</h1>
-                <input type="text" name="username" placeholder="Usuario" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-                <button type="submit">Iniciar Sesion</button>
+                <h1>Iniciar Sesión</h1>
+                <input type="text" name="username" placeholder="Usuario" required />
+                <input type="password" name="password" placeholder="Contraseña" required />
+                <button type="submit">Iniciar Sesión</button>
             </form>
-            
+
             {% if 'rol' in session %}
                 {% if session['rol'] == 'Administrador' %}
                     <a class="inicio" href="{{ url_for('admin_dashboard') }}">
-                        <button type="submit">Regrasar al inicio</button>
+                        <button type="button">Regresar al inicio</button>
                     </a>
                 {% elif session['rol'] == 'Estudiante' %}
                     <a class="inicio" href="{{ url_for('estudiante_dashboard') }}">
-                        <button type="submit">Regrasar al inicio</button>
+                        <button type="button">Regresar al inicio</button>
                     </a>
-            {% endif %}
+                {% endif %}
             {% else %}
                 <a class="inicio" href="{{ url_for('inicio') }}">
-                <button type="submit">Regrasar al inicio</button>
+                    <button type="button">Regresar al inicio</button>
                 </a>
             {% endif %}
-            
         </div>
+
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
                     <h1>Bienvenido de nuevo</h1>
-                    <p>Ya tienes cuenta??</p>
-                    <button class="hidden" id="login">Regresar a niciar Sesion</button>
+                    <p>¿Ya tienes cuenta?</p>
+                    <button class="hidden" id="login">Regresar a iniciar sesión</button>
                 </div>
                 <div class="toggle-panel toggle-right">
                     <h1>Bienvenido de nuevo</h1>
-                    <p>No tienes cuenta??</p>
-                    <button class="hidden" id="register">Rigistrarme</button>
+                    <p>¿No tienes cuenta?</p>
+                    <button class="hidden" id="register">Registrarme</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        const formRegistro = document.getElementById('formRegistro');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const errorMsg = document.getElementById('errorMsg');
+
+        formRegistro.addEventListener('submit', function(event) {
+            if (password.value !== confirmPassword.value) {
+                event.preventDefault();  // Evita enviar el formulario
+                errorMsg.style.display = 'block';  // Muestra el mensaje de error
+            } else {
+                errorMsg.style.display = 'none';  // Oculta el mensaje si está correcto
+            }
+        });
+    </script>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+<!-- Mostrar mensajes flash -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 
 </html>
