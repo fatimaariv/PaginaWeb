@@ -8,9 +8,12 @@
 <body>
     <header>
         <div class="logo">
-            <h1>OSOS</h1>
-            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" />
-        </div>
+    <a href="{{ url_for('inicio') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+        <h1 style="margin-right: 10px;">OSOS</h1>
+        <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+    </a>
+</div>
+
         
         <div class="menu">
             <nav>
