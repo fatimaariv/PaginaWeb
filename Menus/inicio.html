@@ -9,10 +9,13 @@
 <body>
     <header>
         <div class="logo">
-            <h1>OSOS</h1>
-            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" />
-        </div>
-        
+    <a href="{{ url_for('inicio') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+        <h1 style="margin-right: 10px;">OSOS</h1>
+        <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+    </a>
+</div>
+
+
         <div class="menu">
             <nav>
                 <ul class="nav-menu">
@@ -51,21 +54,29 @@
         <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
         <section class="resenas">
             <h3>Buro de reseñas relevantes</h3>
-            <div class="tarjeta-resena">
-                <div class="resena-usuario">
-                    <span class="usuario">👤 riveraa</span>
-                    <span class="materia">Materia: Matematicas 2</span>
-                    <span class="profesor">Profesor: Pancho Lopez Perez</span>
-                </div>
-                <p class="texto-resena">En este apartado ira la reseña agregada por cada usuario............</p>
-                <div class="interaccion">
-                    <span class="likes">👍 10</span>
-                    <span class="calificacion">Calificación:
-                        <span class="estrellas">★★★★★</span>
-                    </span>
-                    <span class="alerta">❗</span>
-                </div>
+            <section class="resenas">
+    <h3>Buro de reseñas relevantes</h3>
+    {% for resena in resenas %}
+        <div class="tarjeta-resena">
+            <div class="resena-usuario">
+                <span class="usuario">👤 {{ resena.NomUsuario }}</span>
+                <span class="materia">Materia: {{ resena.nombreMateria }}</span>
+                <span class="profesor">Profesor: {{ resena.nombreMaestro }}</span>
             </div>
+            <p class="texto-resena">{{ resena.comentario }}</p>
+            <div class="interaccion">
+                <span class="likes">👍 ?</span> <!-- Aquí podrías poner el número de likes si lo sacas también -->
+                <span class="calificacion">Calificación:
+                    <span class="estrellas">
+                        {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
+                    </span>
+                </span>
+                <span class="alerta">❗</span>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
         </section>
     </main>
 </body>
