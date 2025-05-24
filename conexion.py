@@ -14,7 +14,7 @@ def obtener_maestros():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -27,7 +27,7 @@ def obtener_resenas_maestro(nombre_maestro):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -51,7 +51,7 @@ def obtener_nombre_materia(idMateria):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -64,7 +64,7 @@ def obtener_materias():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -73,6 +73,14 @@ def obtener_materias():
     conexion.close()
     return materias
 
+def obtener_conexion():
+    return mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='Ghostface',
+        database='PagWeb'
+    )
+
 # ------------------ RUTAS ------------------
 
 @app.route('/maestro/<nombre>')
@@ -80,9 +88,31 @@ def ver_resenas_maestro(nombre):
     resenas = obtener_resenas_maestro(nombre)
     return render_template('resenasMaestro.html', nombre=nombre, resenas=resenas)
 
-@app.route('/')
+@app.route("/")
 def inicio():
-    return render_template('inicio.html')
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+    
+    # Consulta para obtener las reseñas más recientes
+    cursor.execute("""
+        SELECT r.comentario, r.calificacion, r.fecha,
+               u.NomUsuario,
+               m.nombreMateria,
+               ma.nombreMaestro
+        FROM reseñas r
+        JOIN usuarios u ON r.idUsuario = u.idUsuario
+        JOIN maestro_materia mm ON r.idMaestro_Materia = mm.idMaestro_Materia
+        JOIN materias m ON mm.idMateria = m.idMateria
+        JOIN maestros ma ON mm.idMaestro = ma.idMaestro
+        ORDER BY r.fecha DESC
+        LIMIT 5;
+    """)
+    
+    resenas = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+    
+    return render_template("inicio.html", resenas=resenas)
 
 @app.route('/agregar-resena')  # Define la URL de acceso (ej: /agregar-resena)
 def agregar_resena():
@@ -107,7 +137,7 @@ def reseñas_por_materia(idMateria):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -144,7 +174,7 @@ def login_post():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -181,7 +211,7 @@ def register_post():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="f7t4m7DAR_",
+        password="Ghostface",
         database="PagWeb"
     )
     cursor = conexion.cursor()
