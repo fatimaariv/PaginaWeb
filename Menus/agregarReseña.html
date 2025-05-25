@@ -5,14 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='diseñoReseña.css') }}">
 </head>
 <body>
     <header>
         <div class="logo">
-    <a href="{{ url_for('inicio') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-        <h1 style="margin-right: 10px;">OSOS</h1>
-        <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
-    </a>
+    {% set link = url_for('inicio') %}
+                {% if 'rol' in session %}
+                    {% if session['rol'] == 'Administrador' %}
+                    {% set link = url_for('admin_dashboard') %}
+                    {% elif session['rol'] == 'Estudiante' %}
+                {% set link = url_for('estudiante_dashboard') %}
+                {% endif %}
+            {% endif %}
+
+        <a href="{{ link }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+            <h1 style="margin-right: 10px;">OSOS</h1>
+            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+        </a>
 </div>
 
         
@@ -53,7 +63,26 @@
     </header>
 
     <main>
-        
+        <div class="formulario">
+            <select id="materia" name="materia" onchange="redirigirPorMateria()">
+                <option value="">Selecciona una materia</option>
+            </select>
+
+            <select id="maestro" name="maestro">
+                <option value="">Selecciona un maestro</option>
+            </select>
+
+            <label for="resena">Reseña:</label>
+            <textarea id="resena" name="resena" rows="4" placeholder="Escribe tu reseña aquí..."></textarea>
+
+            <label class="calificacion-label">Calificación:</label>
+            <div class="estrellas">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+
+            <button type="submit">Guardar datos</button>
+        </div> 
     </main>
 </body>
+    <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>

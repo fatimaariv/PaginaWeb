@@ -1,0 +1,49 @@
+
+
+.formulario {
+    background-color: #4b3a07;
+    padding: 20px;
+    border-radius: 20px;
+    width: 350px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    margin-top: 100px;
+    margin-left: 500px;
+}
+
+select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background-color: #2b2b2b;
+    color: white;
+}
+
+.calificacion-label {
+    color: #ffc107;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+.estrellas {
+    font-size: 25px;
+    color: black;
+    background-color: #a67c00;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(to bottom, #fff, #ccc);
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}

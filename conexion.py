@@ -2,6 +2,8 @@ from flask import Flask, render_template, url_for
 import mysql.connector
 from flask import request, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_cors import CORS
+
 
 app = Flask(__name__, template_folder='Menus', static_folder='static')
 
@@ -9,12 +11,13 @@ app.secret_key = 'clave_secreta_segura'  # Usa una más segura en producción
 
 # ------------------ FUNCIONES DE CONEXIÓN ------------------
 
+CORS(app)
 
 def obtener_maestros():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -27,7 +30,7 @@ def obtener_resenas_maestro(nombre_maestro):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -51,7 +54,7 @@ def obtener_nombre_materia(idMateria):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -64,7 +67,7 @@ def obtener_materias():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -77,7 +80,7 @@ def obtener_conexion():
     return mysql.connector.connect(
         host='localhost',
         user='root',
-        password='Ghostface',
+        password='f7t4m7DAR_',
         database='PagWeb'
     )
 
@@ -96,9 +99,9 @@ def inicio():
     # Consulta para obtener las reseñas más recientes
     cursor.execute("""
         SELECT r.comentario, r.calificacion, r.fecha,
-               u.NomUsuario,
-               m.nombreMateria,
-               ma.nombreMaestro
+            u.NomUsuario,
+            m.nombreMateria,
+            ma.nombreMaestro
         FROM reseñas r
         JOIN usuarios u ON r.idUsuario = u.idUsuario
         JOIN maestro_materia mm ON r.idMaestro_Materia = mm.idMaestro_Materia
@@ -137,7 +140,7 @@ def reseñas_por_materia(idMateria):
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -174,7 +177,7 @@ def login_post():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor(dictionary=True)
@@ -211,7 +214,7 @@ def register_post():
     conexion = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Ghostface",
+        password="f7t4m7DAR_",
         database="PagWeb"
     )
     cursor = conexion.cursor()
@@ -252,6 +255,8 @@ def estudiante_dashboard():
 def logout():
     session.clear()
     return redirect(url_for('inicio'))
+
+
 
 
 # ------------------ INICIO DEL SERVIDOR ------------------
