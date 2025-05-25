@@ -96,7 +96,6 @@ def inicio():
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
     
-    # Consulta para obtener las reseñas más recientes
     cursor.execute("""
         SELECT r.comentario, r.calificacion, r.fecha,
             u.NomUsuario,
@@ -117,9 +116,9 @@ def inicio():
     
     return render_template("inicio.html", resenas=resenas)
 
-@app.route('/agregar-resena')  # Define la URL de acceso (ej: /agregar-resena)
+@app.route('/agregar-resena')
 def agregar_resena():
-    return render_template('agregarReseña.html')  # Renderiza el HTML
+    return render_template('agregarReseña.html')
 
 @app.route('/materias')
 def mostrar_materias():
@@ -157,7 +156,6 @@ def reseñas_por_materia(idMateria):
     reseñas = cursor.fetchall()
     conexion.close()
     
-    # También puedes traer el nombre de la materia para mostrar en la plantilla
     nombre_materia = obtener_nombre_materia(idMateria)
 
     return render_template('resenasMaterias.html', reseñas=reseñas, nombre_materia=nombre_materia)
@@ -225,7 +223,6 @@ def register_post():
         conexion.close()
         return redirect('/login')
 
-    # Obtener id del rol 'Estudiante'
     cursor.execute("SELECT idRol FROM Roles WHERE NomRol = 'Estudiante'")
     id_rol = cursor.fetchone()
     if not id_rol:
@@ -258,11 +255,74 @@ def logout():
 
 
 
+# ------------------ CRUD DE MATERIAS ------------------
+
+@app.route('/admin/materias')
+def crud_materias():
+    if 'rol' not in session or session['rol'] != 'Administrador':
+        flash("Acceso denegado.")
+        return redirect('/')
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("SELECT idMateria, nombreMateria FROM materias ORDER BY nombreMateria ASC")
+    materias = cursor.fetchall()
+    conexion.close()
+    return render_template('crudMaterias.html', materias=materias)
+
+@app.route('/admin/materias/agregar', methods=['POST'])
+def agregar_materia():
+    if 'rol' not in session or session['rol'] != 'Administrador':
+        flash("Acceso denegado.")
+        return redirect('/')
+
+    nombre = request.form['nombreMateria']
+    if not nombre.strip():
+        flash("El nombre de la materia no puede estar vacío.")
+        return redirect('/admin/materias')
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("INSERT INTO materias (nombreMateria) VALUES (%s)", (nombre,))
+    conexion.commit()
+    conexion.close()
+    flash("Materia agregada correctamente.")
+    return redirect('/admin/materias')
+
+@app.route('/admin/materias/eliminar/<int:idMateria>', methods=['POST'])
+def eliminar_materia(idMateria):
+    if 'rol' not in session or session['rol'] != 'Administrador':
+        flash("Acceso denegado.")
+        return redirect('/')
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM materias WHERE idMateria = %s", (idMateria,))
+    conexion.commit()
+    conexion.close()
+    flash("Materia eliminada correctamente.")
+    return redirect('/admin/materias')
+
+@app.route('/admin/materias/editar/<int:idMateria>', methods=['POST'])
+def editar_materia(idMateria):
+    if 'rol' not in session or session['rol'] != 'Administrador':
+        flash("Acceso denegado.")
+        return redirect('/')
+
+    nuevo_nombre = request.form['nuevoNombre']
+    if not nuevo_nombre.strip():
+        flash("El nuevo nombre no puede estar vacío.")
+        return redirect('/admin/materias')
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("UPDATE materias SET nombreMateria = %s WHERE idMateria = %s", (nuevo_nombre, idMateria))
+    conexion.commit()
+    conexion.close()
+    flash("Nombre de la materia actualizado.")
+    return redirect('/admin/materias')
 
 # ------------------ INICIO DEL SERVIDOR ------------------
 
-
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
-
-

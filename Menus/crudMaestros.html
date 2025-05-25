@@ -1,0 +1,40 @@
+<!-- crudMaestros.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD de Maestros</title>
+</head>
+<body>
+    <h1>Administrar Maestros</h1>
+
+    {% with mensajes = get_flashed_messages() %}
+        {% if mensajes %}
+            <ul>
+            {% for mensaje in mensajes %}
+                <li>{{ mensaje }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('agregar_maestro') }}" method="POST">
+        <input type="text" name="nombreMaestro" placeholder="Nombre del maestro" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <h2>Lista de Maestros</h2>
+    <ul>
+        {% for maestro in maestros %}
+            <li>
+                {{ maestro.nombreMaestro }}
+                <form action="{{ url_for('eliminar_maestro', idMaestro=maestro.idMaestro) }}" method="POST" style="display:inline;">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/admin">Volver al Dashboard</a>
+</body>
+</html>
