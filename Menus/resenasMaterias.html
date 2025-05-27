@@ -59,40 +59,49 @@
                 </ul>
             </nav>
         </div>
-        {% if 'rol' in session %}
-            <a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a>
-        {% else %}
-            <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
-        {% endif %}
+        {% if 'usuario' in session and 'rol' in session %}
+            <div class="user-info">
+                <ul>
+                    <li><p>{{ session['rol'] }}</p></li>
+                    <li><p>{{ session['usuario'] }}</p></li>
+                    <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
+                </ul>
+            </div>
+            
+            {% else %}
+                <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+            {% endif %}
     </header>
     <main>
         <h1 class="titlereseña">Reseñas para la materia: {{ nombre_materia }}</h1>
-
-    <div class="contenedor-resenas">
+    <section class="resenas">
     {% if reseñas %}
-        <ul class="lista-resenas">
-            {% for reseña in reseñas %}
-                <li class="resena">
-                    <h3 class="resena-usuario">{{ reseña.NomUsuario }}</h3>
-                    <p class="resena-meta">
-                        <strong>Materia:</strong> {{ reseña.materia }} | 
-                        <strong>Profesor:</strong> {{ reseña.nombreMaestro }}
-                    </p>
-                    <p class="resena-comentario">{{ reseña.comentario }}</p>
-                    <div class="resena-calificacion">
-                        {% for i in range(1, 6) %}
-                            <span class="estrella {% if i <= reseña.calificacion %}llena{% else %}vacia{% endif %}">★</span>
-                        {% endfor %}
-                        <span class="puntaje">({{ reseña.calificacion }}/5)</span>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+        {% for reseña in reseñas %}
+            <div class="tarjeta-resena">
+                <div class="resena-usuario">
+                    <span class="usuario">👤 {{ reseña.NomUsuario }}</span>
+                    <span class="materia">Materia: {{ nombre_materia }}</span>
+                    <span class="profesor">Profesor: {{ reseña.nombreMaestro }}</span>
+                </div>
+                <p class="texto-resena">{{ reseña.comentario }}</p>
+                <div class="interaccion">
+                    <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
+                    <span class="calificacion">Calificación:
+                        <span class="estrellas">
+                            {{ "★" * reseña.calificacion }}{{ "☆" * (5 - reseña.calificacion) }}
+                        </span>
+                    </span>
+                    <span class="alerta">❗</span>
+                </div>
+            </div>
+        {% endfor %}
     {% else %}
         <p class="sin-resenas">No hay reseñas para esta materia.</p>
     {% endif %}
-    <p class="texto-guia">En este apartado irá la reseña agregada por cada usuario...</p>
-</div>
+</section>
+
+
     </main>
     
 

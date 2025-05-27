@@ -116,9 +116,7 @@ def inicio():
     
     return render_template("inicio.html", resenas=resenas)
 
-@app.route('/agregar-resena')
-def agregar_resena():
-    return render_template('agregarReseña.html')
+
 
 @app.route('/materias')
 def mostrar_materias():
@@ -253,7 +251,68 @@ def logout():
     session.clear()
     return redirect(url_for('inicio'))
 
+# ------------------ RUTA INICIAL pag reseñas ------------------
+@app.route('/agregar-resena')
+def agregar_resena():
+    materias = obtener_materias()
+    return render_template('agregarRes.html', materias=materias)
 
+# ------------------ RUTA PARA OBTENER MAESTROS pag reseñas ------------------
+@app.route('/obtener-maestros/<int:id_materia>')
+def obtener_maestros_por_materia(id_materia):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
+    
+    query = """
+    SELECT m.idMaestro, m.nombreMaestro
+    FROM maestro_materia mm
+    JOIN maestros m ON mm.idMaestro = m.idMaestro
+    WHERE mm.idMateria = %s
+    """
+    cursor.execute(query, (id_materia,))
+    maestros = cursor.fetchall()
+    conexion.close()
+    
+    return {'maestros': maestros}
+
+# ------------------ RUTA PARA AGREGAR RESEÑA pag reseñas ------------------
+@app.route('/guardar-resena', methods=['POST'])
+def guardar_resena():
+    if 'usuario' not in session:
+        flash("Debes iniciar sesión para agregar una reseña.")
+        return redirect('/login')
+
+    comentario = request.form['comentario']
+    calificacion = int(request.form['calificacion'])
+    id_maestro = int(request.form['maestro'])
+    id_materia = int(request.form['materia'])
+    id_usuario = session['usuario']
+
+    # Obtener idMaestro_Materia
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("""
+        SELECT idMaestro_Materia FROM maestro_materia
+        WHERE idMaestro = %s AND idMateria = %s
+    """, (id_maestro, id_materia))
+    resultado = cursor.fetchone()
+
+    if not resultado:
+        flash("No se encontró relación maestro-materia.")
+        conexion.close()
+        return redirect('/agregar-resena')
+
+    id_maestro_materia = resultado[0]
+
+    cursor.execute("""
+        INSERT INTO reseñas (comentario, calificacion, idUsuario, idMaestro_Materia)
+        VALUES (%s, %s, %s, %s)
+    """, (comentario, calificacion, session['idUsuario'], id_maestro_materia))
+    conexion.commit()
+    conexion.close()
+
+    flash("¡Reseña guardada con éxito!")
+    return redirect('/')
 
 # ------------------ CRUD DE MATERIAS ------------------
 
@@ -321,6 +380,31 @@ def editar_materia(idMateria):
     conexion.close()
     flash("Nombre de la materia actualizado.")
     return redirect('/admin/materias')
+
+@app.route('/like/<int:id>', methods=['POST'])
+def like(id):
+    if 'idUsuario' not in session:
+        return jsonify({'error': 'no autorizado'}), 403
+
+    user_id = session['idUsuario']
+
+    # Verifica si ya reaccionó
+    reaccion = db.session.execute(
+        "SELECT * FROM reacciones WHERE idUsuario=%s AND idReseña=%s",
+        (user_id, id)
+    ).fetchone()
+
+    if reaccion:
+        return jsonify({'message': 'ya reaccionaste'}), 400
+
+    # Insertar like
+    db.session.execute(
+        "INSERT INTO reacciones (idUsuario, idReseña, idTipo) VALUES (%s, %s, 1)",
+        (user_id, id)
+    )
+    db.session.commit()
+    return jsonify({'message': 'like registrado'})
+
 
 # ------------------ INICIO DEL SERVIDOR ------------------
 

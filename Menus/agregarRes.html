@@ -10,7 +10,7 @@
 <body>
     <header>
         <div class="logo">
-    {% set link = url_for('inicio') %}
+            {% set link = url_for('inicio') %}
                 {% if 'rol' in session %}
                     {% if session['rol'] == 'Administrador' %}
                     {% set link = url_for('admin_dashboard') %}
@@ -55,25 +55,42 @@
                 </ul>
             </nav>
         </div>
-        {% if 'rol' in session %}
-            <a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a>
-        {% else %}
-            <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
-        {% endif %}
+        {% if 'usuario' in session and 'rol' in session %}
+            <div class="user-info">
+                <ul>
+                    <li><p>{{ session['rol'] }}</p></li>
+                    <li><p>{{ session['usuario'] }}</p></li>
+                    <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
+                </ul>
+            </div>
+            
+            {% else %}
+                <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+            {% endif %}
     </header>
 
     <main>
-        <div class="formulario">
-            <label for="resena">Reseña:</label>
-            <textarea id="resena" name="resena" rows="4" placeholder="Escribe tu reseña aquí..."></textarea>
+        <form method="POST" action="/guardar-resena" class="formulario">
+            <label for="materia">Selecciona una materia:</label>
+            <select name="materia" id="materia" required>
+            <option value="">-- Elige una materia --</option>
+            {% for materia in materias %}
+            <option value="{{ materia.idMateria }}">{{ materia.nombreMateria }}</option>
+            {% endfor %}
+            </select>
 
-            <label class="calificacion-label">Calificación:</label>
-            <div class="estrellas">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-            </div>
+    <label for="maestro">Selecciona un maestro:</label>
+    <select name="maestro" id="maestro" required>
+        <option value="">-- Elige un maestro --</option>
+    </select>
 
-            <button type="submit">Guardar datos</button>
-        </div> 
+    <label for="comentario">Comentario:</label>
+    <textarea name="comentario" required></textarea>
+    <label for="calificacion">Calificación (1 a 5):</label>
+    <input type="number" name="calificacion" min="1" max="5" required>
+
+    <button type="submit">Enviar reseña</button>
+    </form>
     </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>

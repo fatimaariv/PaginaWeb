@@ -59,9 +59,8 @@ header {
 
 
 .menu{
-    margin-top: 55px;
-    margin-right: 400px;
-    font-size: 20px;
+    margin-top: 20px;
+    font-size: 15px;
     position: relative;
     display: inline-block;
 }
@@ -70,7 +69,7 @@ header {
   background-color: #25411c; /* verde oscuro */
     color: white;
     padding: 10px 20px;
-    font-size: 20px;
+    font-size: 16px;
     border: none;
     cursor: pointer;
 }
@@ -119,13 +118,13 @@ nav a {
 .login-btn {
     background-color: #afafaf;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     font-weight: bold;
     cursor: pointer;
     opacity: 0.7;
     color: #fff9f9;
     text-decoration: none;
-    margin-top: 60px;
+    margin-top: 10px;
 }
 
 .eslogan {
@@ -178,7 +177,15 @@ main h2{
 .interaccion {
     display: flex;
     align-items: center;
+    display: flex;
+    align-items: right;
     justify-content: space-between;
+}
+
+.dislikes {
+    color: #ff7f7f;
+    font-size: 1.1rem;
+    margin-right: 980px;
 }
 
 .likes {
@@ -230,7 +237,7 @@ main h2{
 }
 
 .resena-usuario {
-    color: #e74c3c;
+    color: #d1d0d0;
     margin-bottom: 5px;
 }
 
@@ -312,4 +319,19 @@ main h2{
     border-bottom: none;
 }
 
+.user-info {
+    font-size: 16px;
+    margin-left: 250px;
+    margin-bottom: 20px;
+    direction: rtl;
+    text-align: right;
+    color: #fff9f9;
+}
 
+.user-info li{
+    list-style: none;
+}
+
+.logout-item {
+    margin-top: 8px; /* Puedes ajustar el valor según el espacio que desees */
+}

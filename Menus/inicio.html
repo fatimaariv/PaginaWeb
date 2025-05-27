@@ -62,7 +62,6 @@
     <main>
         <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
         <section class="resenas">
-            <h3>Buro de reseñas relevantes</h3>
             <section class="resenas">
     <h3>Buro de reseñas relevantes</h3>
     {% for resena in resenas %}
@@ -74,7 +73,8 @@
             </div>
             <p class="texto-resena">{{ resena.comentario }}</p>
             <div class="interaccion">
-                <span class="likes">👍 ?</span> <!-- Aquí podrías poner el número de likes si lo sacas también -->
+                <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
                 <span class="calificacion">Calificación:
                     <span class="estrellas">
                         {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
@@ -89,6 +89,7 @@
         </section>
     </main>
 </body>
+    <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>
 
 

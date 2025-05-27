@@ -13,13 +13,13 @@
 
     <!-- Mostrar mensajes flash -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
+        {% if messages %}
         <ul class="flash-messages" style="color: red; list-style: none;">
-          {% for message in messages %}
+            {% for message in messages %}
             <li>{{ message }}</li>
-          {% endfor %}
+            {% endfor %}
         </ul>
-      {% endif %}
+        {% endif %}
     {% endwith %}
 
     <div class="container" id="container">

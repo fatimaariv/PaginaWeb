@@ -61,11 +61,18 @@
                 </ul>
             </nav>
         </div>
-        {% if 'rol' in session %}
-            <a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a>
-        {% else %}
-            <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
-        {% endif %}
+        {% if 'usuario' in session and 'rol' in session %}
+            <div class="user-info">
+                <ul>
+                    <li><p>{{ session['rol'] }}</p></li>
+                    <li><p>{{ session['usuario'] }}</p></li>
+                    <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
+                </ul>
+            </div>
+            
+            {% else %}
+                <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+            {% endif %}
     </header>
 
     <main>
