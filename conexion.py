@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, jsonify, render_template, url_for
 import mysql.connector
 from flask import request, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -83,6 +83,8 @@ def obtener_conexion():
         password='f7t4m7DAR_',
         database='PagWeb'
     )
+    
+    
 
 # ------------------ RUTAS ------------------
 
@@ -95,7 +97,7 @@ def ver_resenas_maestro(nombre):
 def inicio():
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
-    
+
     cursor.execute("""
         SELECT r.comentario, r.calificacion, r.fecha,
             u.NomUsuario,
@@ -107,14 +109,21 @@ def inicio():
         JOIN materias m ON mm.idMateria = m.idMateria
         JOIN maestros ma ON mm.idMaestro = ma.idMaestro
         ORDER BY r.fecha DESC
-        LIMIT 5;
     """)
     
     resenas = cursor.fetchall()
     cursor.close()
     conexion.close()
-    
+
+    if 'rol' in session:
+        if session['rol'] == 'Administrador':
+            return render_template("pagAdmi.html", resenas=resenas)  # Aquí sin "Menus/"
+        elif session['rol'] == 'Estudiante':
+            return render_template("pagEstudiante.html", resenas=resenas)
+
     return render_template("inicio.html", resenas=resenas)
+
+
 
 
 
@@ -251,11 +260,17 @@ def logout():
     session.clear()
     return redirect(url_for('inicio'))
 
+@app.route('/agregarAdmi')
+def agregar_admi():
+    return render_template('agregarAdmi.html')
+
 # ------------------ RUTA INICIAL pag reseñas ------------------
 @app.route('/agregar-resena')
 def agregar_resena():
     materias = obtener_materias()
     return render_template('agregarRes.html', materias=materias)
+
+
 
 # ------------------ RUTA PARA OBTENER MAESTROS pag reseñas ------------------
 @app.route('/obtener-maestros/<int:id_materia>')
@@ -389,21 +404,65 @@ def like(id):
     user_id = session['idUsuario']
 
     # Verifica si ya reaccionó
-    reaccion = db.session.execute(
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute(
         "SELECT * FROM reacciones WHERE idUsuario=%s AND idReseña=%s",
         (user_id, id)
-    ).fetchone()
+    )
+    reaccion = cursor.fetchone()
 
     if reaccion:
+        conexion.close()
         return jsonify({'message': 'ya reaccionaste'}), 400
 
     # Insertar like
-    db.session.execute(
+    cursor.execute(
         "INSERT INTO reacciones (idUsuario, idReseña, idTipo) VALUES (%s, %s, 1)",
         (user_id, id)
     )
-    db.session.commit()
+    conexion.commit()
+    conexion.close()
     return jsonify({'message': 'like registrado'})
+
+conexion = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='f7t4m7DAR_',
+    database='PagWeb'
+)
+cursor = conexion.cursor()
+
+@app.route('/agregar_admin', methods=['GET', 'POST'])
+def agregar_admin():
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        password = request.form['password']
+        confirm = request.form['confirm_password']
+
+        if password != confirm:
+            flash('Las contraseñas no coinciden.')
+            return redirect('/agregar_admin')
+
+        hashed_password = generate_password_hash(password)
+
+        try:
+            cursor.execute("INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES (%s, %s, %s)",
+            (usuario, hashed_password, 2))  # idRol 2 = administrador
+            conexion.commit()
+            flash('Administrador agregado exitosamente.')
+        except Exception as e:
+            flash(f'Error: {e}')
+        return redirect('/agregar_admin')
+
+    return render_template('agregar_admin.html')
+
+usuario = 'Angel'
+contraseña = 'rivera06'
+hash = generate_password_hash(contraseña)
+
+print(f"INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES ('{usuario}', '{hash}', 2);")
+
 
 
 # ------------------ INICIO DEL SERVIDOR ------------------

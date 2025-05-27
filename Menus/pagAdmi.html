@@ -50,13 +50,11 @@
                     <li class="dropdown">
                         <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
                     </li>
-                    <li class="dropdown">
-                        <a class="menu-button" href="#">Eliminar</a>
-                        <div class="submenu">
-                            <a href="{{ url_for('mostrar_maestros') }}">Maestros</a>
-                            <a href="{{ url_for('mostrar_materias') }}">Materias</a>
-                        </div>
-                    </li>
+                    {% if rol == 'Administrador' %}
+<li class="dropdown">
+    <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
+</li>
+{% endif %}
     
                 </ul>
             </nav>
@@ -76,25 +74,33 @@
     </header>
 
     <main>
-        <h2 class="eslogan">Estas en pagina admi</h2>
+        <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
         <section class="resenas">
-            <h3>Buro de reseñas relevantes</h3>
-            <div class="tarjeta-resena">
-                <div class="resena-usuario">
-                    <span class="usuario">👤 riveraa</span>
-                    <span class="materia">Materia: Matematicas 2</span>
-                    <span class="profesor">Profesor: Pancho Lopez Perez</span>
-                </div>
-                <p class="texto-resena">En este apartado ira la reseña agregada por cada usuario............</p>
-                <div class="interaccion">
-                    <span class="likes">👍 10</span>
-                    <span class="calificacion">Calificación:
-                        <span class="estrellas">★★★★★</span>
-                    </span>
-                    <span class="alerta">❗</span>
-                </div>
-            </div>
+            <section class="resenas">
+                <h3>Buro de reseñas relevantes</h3>
+                {% for resena in resenas %}
+                    <div class="tarjeta-resena">
+                        <div class="resena-usuario">
+                            <span class="usuario">👤 {{ resena.NomUsuario }}</span>
+                            <span class="materia">Materia: {{ resena.nombreMateria }}</span>
+                            <span class="profesor">Profesor: {{ resena.nombreMaestro }}</span>
+                        </div>
+                        <p class="texto-resena">{{ resena.comentario }}</p>
+                        <div class="interaccion">
+                            <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                            <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
+                            <span class="calificacion">Calificación:
+                                <span class="estrellas">
+                                  {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
+                                </span>
+                            </span>
+                            <span class="alerta">❗</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
         </section>
     </main>
 </body>
+    <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>
