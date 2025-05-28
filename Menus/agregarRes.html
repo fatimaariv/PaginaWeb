@@ -60,6 +60,13 @@
     <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
 </li>
 {% endif %}
+
+<p> {{ rol }}</p>
+{% if session['rol'] == 'Administrador' %}
+<li class="dropdown">
+    <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
+</li>
+{% endif %}
                 </ul>
             </nav>
         </div>

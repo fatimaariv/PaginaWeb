@@ -9,21 +9,20 @@
 <body>
     <header>
         <div class="logo">
-    {% set link = url_for('inicio') %}
-                {% if 'rol' in session %}
-                    {% if session['rol'] == 'Administrador' %}
+            {% set link = url_for('inicio') %}
+            {% if 'rol' in session %}
+                {% if session['rol'] == 'Administrador' %}
                     {% set link = url_for('admin_dashboard') %}
-                    {% elif session['rol'] == 'Estudiante' %}
-                {% set link = url_for('estudiante_dashboard') %}
+                {% elif session['rol'] == 'Estudiante' %}
+                    {% set link = url_for('estudiante_dashboard') %}
                 {% endif %}
             {% endif %}
 
-        <a href="{{ link }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-            <h1 style="margin-right: 10px;">OSOS</h1>
-            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
-        </a>
-</div>
-
+            <a href="{{ link }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <h1 style="margin-right: 10px;">OSOS</h1>
+                <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+            </a>
+        </div>
 
         <div class="menu">
             <nav>
@@ -31,12 +30,12 @@
                     <li>
                         {% if 'rol' in session %}
                             {% if session['rol'] == 'Administrador' %}
-                            <a class="menu-button" href="{{ url_for('admin_dashboard') }}">Inicio</a>
+                                <a class="menu-button" href="{{ url_for('admin_dashboard') }}">Inicio</a>
                             {% elif session['rol'] == 'Estudiante' %}
-                            <a class="menu-button" href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
-                        {% endif %}
+                                <a class="menu-button" href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
+                            {% endif %}
                         {% else %}
-                        <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
+                            <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
                         {% endif %}
                     </li>
 
@@ -62,35 +61,51 @@
     <main>
         <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
         <section class="resenas">
-            <section class="resenas">
-    <h3>Buro de reseñas relevantes</h3>
-    {% for resena in resenas %}
-        <div class="tarjeta-resena">
-            <div class="resena-usuario">
-                <span class="usuario">👤 {{ resena.NomUsuario }}</span>
-                <span class="materia">Materia: {{ resena.nombreMateria }}</span>
-                <span class="profesor">Profesor: {{ resena.nombreMaestro }}</span>
-            </div>
-            <p class="texto-resena">{{ resena.comentario }}</p>
-            <div class="interaccion">
-                <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
-                <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
-                <span class="calificacion">Calificación:
-                    <span class="estrellas">
-                        {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
-                    </span>
-                </span>
-                <span class="alerta">❗</span>
-            </div>
-        </div>
-    {% endfor %}
-</section>
-
+            <h3>Buro de reseñas relevantes</h3>
+            {% for resena in resenas %}
+                <div class="tarjeta-resena">
+                    <div class="resena-usuario">
+                        <span class="usuario">👤 {{ resena.NomUsuario }}</span>
+                        <span class="materia">Materia: {{ resena.nombreMateria }}</span>
+                        <span class="profesor">Profesor: {{ resena.nombreMaestro }}</span>
+                    </div>
+                    <p class="texto-resena">{{ resena.comentario }}</p>
+                    <div class="interaccion">
+                        <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                        <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
+                        <span class="calificacion">Calificación:
+                            <span class="estrellas">
+                                {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
+                            </span>
+                        </span>
+                        <span class="alerta">❗</span>
+                        <button class="reportar-btn" onclick="reportarResena({{ resena.idResena }})">Reportar</button>
+                    </div>
+                </div>
+            {% endfor %}
         </section>
     </main>
-</body>
+
+    <script>
+    function reportarResena(idResena) {
+        if (confirm("¿Estás seguro de que quieres reportar esta reseña?")) {
+            fetch(`/reportar/${idResena}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(resp => {
+                if (resp.ok) {
+                    alert("Reseña reportada con éxito.");
+                } else {
+                    alert("Hubo un error al reportar la reseña.");
+                }
+            });
+        }
+    }
+    </script>
+
     <script src="{{ url_for('static', filename='menu.js') }}"></script>
+</body>
 </html>
-
-
-

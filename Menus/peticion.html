@@ -83,35 +83,24 @@
                 <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
             {% endif %}
     </header>
+    <h1>Todas las peticiones hechas por los estudiantes</h1>
+    
+    {% for p in peticiones %}
+        <div class="peticion-box">
+            <div class="peticion-header">👤 {{ p.NomUsuario }} — Petición para {{ 'materia' if p.Nom_Peticion == 'Estudiante' else 'maestro' }}</div>
+            <p><strong>{{ 'Materia:' if p.idRol_Peticion == 1 else 'Maestro:' }}</strong> {{ p.peticion }}</p>
+            
+            <div class="botones">
+                <form method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}" style="display:inline;">
+                    <button class="btn btn-aceptar" type="submit">Aceptar</button>
+                </form>
+                <form method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}" style="display:inline;">
+                    <button class="btn btn-denegar" type="submit">Denegar</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
 
-    <main>
-        <h2 class="eslogan">Opinamos con garras, pero sin rasguñar demasiado</h2>
-        <section class="resenas">
-            <section class="resenas">
-                <h3>Buro de reseñas relevantes</h3>
-                {% for resena in resenas %}
-                    <div class="tarjeta-resena">
-                        <div class="resena-usuario">
-                            <span class="usuario">👤 {{ resena.NomUsuario }}</span>
-                            <span class="materia">Materia: {{ resena.nombreMateria }}</span>
-                            <span class="profesor">Profesor: {{ resena.nombreMaestro }}</span>
-                        </div>
-                        <p class="texto-resena">{{ resena.comentario }}</p>
-                        <div class="interaccion">
-                            <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
-                            <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
-                            <span class="calificacion">Calificación:
-                                <span class="estrellas">
-                                  {{ "★" * resena.calificacion }}{{ "☆" * (5 - resena.calificacion) }}
-                                </span>
-                            </span>
-                            <span class="alerta">❗</span>
-                        </div>
-                    </div>
-                {% endfor %}
-            </section>
-        </section>
-    </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>

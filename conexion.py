@@ -256,6 +256,10 @@ def admin_dashboard():
 def estudiante_dashboard():
     return render_template('pagEstudiante.html')
 
+@app.route('/peticion')
+def mostrar_peticion():
+    return render_template('peticion.html')
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -456,7 +460,8 @@ def agregar_admin():
             flash(f'Error: {e}')
         return redirect('/agregar_admin')
 
-    return render_template('agregar_admin.html')
+    return render_template('agregarAdmi.html')
+
 
 usuario = 'Angel'
 contraseña = 'rivera06'
@@ -464,7 +469,68 @@ hash = generate_password_hash(contraseña)
 
 print(f"INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES ('{usuario}', '{hash}', 2);")
 
+@app.route('/ver_peticiones')
+def ver_peticiones():
+    cursor = db.cursor(dictionary=True)
+    query = """
+        SELECT p.idPeticion, p.peticion, u.NomUsuario, t.Nom_Peticion 
+        FROM peticiones p
+        JOIN usuarios u ON p.idUsuario = u.idUsuario
+        JOIN Tipo_Peticion t ON p.idRol_Peticion = t.idRol_Peticion;
+    """
+    cursor.execute(query)
+    peticiones = cursor.fetchall()
+    return render_template('ver_peticiones.html', peticiones=peticiones)
 
+@app.route('/aceptar_peticion/<int:id>', methods=['POST'])
+def aceptar_peticion(id):
+    cursor = db.cursor(dictionary=True)
+
+    # Obtener contenido de la petición
+    cursor.execute("""
+        SELECT peticion, idRol_Peticion FROM peticiones WHERE idPeticion = %s
+    """, (id,))
+    peticion = cursor.fetchone()
+
+    if peticion:
+        texto = peticion['peticion']
+        tipo = peticion['idRol_Peticion']
+
+        if tipo == 1:  # Materia
+            cursor.execute("INSERT INTO materias (nombreMateria) VALUES (%s)", (texto,))
+        elif tipo == 2:  # Maestro
+            cursor.execute("INSERT INTO maestros (nombreMaestro) VALUES (%s)", (texto,))
+
+        cursor.execute("DELETE FROM peticiones WHERE idPeticion = %s", (id,))
+        db.commit()
+
+    return redirect(url_for('ver_peticiones'))
+
+
+@app.route('/denegar_peticion/<int:id>', methods=['POST'])
+def denegar_peticion(id):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM peticiones WHERE idPeticion = %s", (id,))
+    db.commit()
+    return redirect(url_for('ver_peticiones'))
+
+@app.route('/reportar/<int:id_resena>', methods=['POST'])
+def reportar_resena(id_resena):
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="TU_PASSWORD",
+            database="PagWeb"
+        )
+        cursor = conexion.cursor()
+        cursor.execute("UPDATE resenas SET reportada = 1 WHERE idResena = %s", (id_resena,))
+        conexion.commit()
+        conexion.close()
+        return '', 204  # No Content
+    except Exception as e:
+        print("Error al reportar reseña:", e)
+        return 'Error interno del servidor', 500
 
 # ------------------ INICIO DEL SERVIDOR ------------------
 
