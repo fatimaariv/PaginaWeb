@@ -117,9 +117,9 @@ def inicio():
 
     if 'rol' in session:
         if session['rol'] == 'Administrador':
-            return render_template("pagAdmi.html", resenas=resenas)  # Aquí sin "Menus/"
+            return render_template("inicio.html", resenas=resenas)  # Aquí sin "Menus/"
         elif session['rol'] == 'Estudiante':
-            return render_template("pagEstudiante.html", resenas=resenas)
+            return render_template("inicio.html", resenas=resenas)
 
     return render_template("inicio.html", resenas=resenas)
 
@@ -200,9 +200,9 @@ def login_post():
         session['idUsuario'] = usuario['idUsuario']  # ✅ Aquí lo agregas
         session['rol'] = usuario['NomRol']
         if usuario['NomRol'] == 'Administrador':
-            return redirect('/admin')
+            return redirect('/')
         else:
-            return redirect('/estudiante')
+            return redirect('/')
     else:
         flash("Usuario o contraseña incorrectos")
         return redirect('/login')
@@ -248,13 +248,6 @@ def register_post():
     flash("Registro exitoso, ahora puedes iniciar sesión.")
     return redirect('/login')
 
-@app.route('/admin')
-def admin_dashboard():
-    return render_template('pagAdmi.html')
-
-@app.route('/estudiante')
-def estudiante_dashboard():
-    return render_template('pagEstudiante.html')
 
 @app.route('/peticion')
 def mostrar_peticion():

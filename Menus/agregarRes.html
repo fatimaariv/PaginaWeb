@@ -10,35 +10,18 @@
 <body>
     <header>
         <div class="logo">
-            {% set link = url_for('inicio') %}
-                {% if 'rol' in session %}
-                    {% if session['rol'] == 'Administrador' %}
-                    {% set link = url_for('admin_dashboard') %}
-                    {% elif session['rol'] == 'Estudiante' %}
-                {% set link = url_for('estudiante_dashboard') %}
-                {% endif %}
-            {% endif %}
-
-        <a href="{{ link }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-            <h1 style="margin-right: 10px;">OSOS</h1>
-            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
-        </a>
-</div>
+        <a href="{{ url_for('inicio') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <h1 style="margin-right: 10px;">OSOS</h1>
+                <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+            </a>
+        </div>
 
         
         <div class="menu">
             <nav>
-                <ul class="nav-menu">
+                                <ul class="nav-menu">
                     <li>
-                        {% if 'rol' in session %}
-                            {% if session['rol'] == 'Administrador' %}
-                            <a class="menu-button" href="{{ url_for('admin_dashboard') }}">Inicio</a>
-                            {% elif session['rol'] == 'Estudiante' %}
-                            <a class="menu-button" href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
-                        {% endif %}
-                        {% else %}
                         <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
-                        {% endif %}
                     </li>
 
                     <li class="dropdown">
@@ -49,24 +32,29 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
+                        {% if 'rol' in session %}
+                            <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
+                        {% else %}
+                            <a class="menu-button" href="#">Agregar reseña</a>
+                            <div class="submenu">
+                            <p>Necesitas iniciar sesión</p>
+                            </div>
+                        {% endif %}
                     </li>
+                    
                     <p> {{ rol }}</p>
+                    {% if session['rol'] == 'Administrador' %}
+                        <li class="dropdown">
+                            <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
+                        </li>
+                    {% endif %}
 
-
-
-{% if session['rol'] == 'Administrador' %}
-<li class="dropdown">
-    <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
-</li>
-{% endif %}
-
-<p> {{ rol }}</p>
-{% if session['rol'] == 'Administrador' %}
-<li class="dropdown">
-    <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
-</li>
-{% endif %}
+                    <p> {{ rol }}</p>
+                    {% if session['rol'] == 'Administrador' %}
+                        <li class="dropdown">
+                            <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

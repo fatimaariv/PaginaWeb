@@ -5,39 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+
 </head>
 <body>
     <header>
         <div class="logo">
-    {% set link = url_for('inicio') %}
-                {% if 'rol' in session %}
-                    {% if session['rol'] == 'Administrador' %}
-                    {% set link = url_for('admin_dashboard') %}
-                    {% elif session['rol'] == 'Estudiante' %}
-                {% set link = url_for('estudiante_dashboard') %}
-                {% endif %}
-            {% endif %}
+            <a href="{{ url_for('inicio') }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                <h1 style="margin-right: 10px;">OSOS</h1>
+                <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
+            </a>
+        </div>
 
-        <a href="{{ link }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-            <h1 style="margin-right: 10px;">OSOS</h1>
-            <img src="{{ url_for('static', filename='ImagenesOSOS/oso.png') }}" alt="Logo OSOS" style="height: 50px;">
-        </a>
-</div>
-
-        
         <div class="menu">
             <nav>
-                <ul class="nav-menu">
+                                <ul class="nav-menu">
                     <li>
-                        {% if 'rol' in session %}
-                            {% if session['rol'] == 'Administrador' %}
-                            <a class="menu-button" href="{{ url_for('admin_dashboard') }}">Inicio</a>
-                            {% elif session['rol'] == 'Estudiante' %}
-                            <a class="menu-button" href="{{ url_for('estudiante_dashboard') }}">Inicio</a>
-                        {% endif %}
-                        {% else %}
                         <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
-                        {% endif %}
                     </li>
 
                     <li class="dropdown">
@@ -57,38 +40,45 @@
                             </div>
                         {% endif %}
                     </li>
+                    
                     <p> {{ rol }}</p>
+                    {% if session['rol'] == 'Administrador' %}
+                        <li class="dropdown">
+                            <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
+                        </li>
+                    {% endif %}
 
-
-
-{% if session['rol'] == 'Administrador' %}
-<li class="dropdown">
-    <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
-</li>
-{% endif %}
-
-<p> {{ rol }}</p>
-{% if session['rol'] == 'Administrador' %}
-<li class="dropdown">
-    <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
-</li>
-{% endif %}
+                    <p> {{ rol }}</p>
+                    {% if session['rol'] == 'Administrador' %}
+                        <li class="dropdown">
+                            <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
-        
+        {% if 'usuario' in session and 'rol' in session %}
+            <div class="user-info">
+                <ul>
+                    <li><p>{{ session['rol'] }}</p></li>
+                    <li><p>{{ session['usuario'] }}</p></li>
+                    <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
+                </ul>
+            </div>
+            
+            {% else %}
+                <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+            {% endif %}
     </header>
-
     <main>
         <h1 class="titlereseña">Reseñas por maestro</h1>
-    <div class="contenedor-botones"> <!-- Nuevo div contenedor -->
+            <div class="contenedor-botones"> <!-- Nuevo div contenedor -->
         <ul class="lista-maestros">
             {% for maestro in maestros %}
                 <li><a class="boton-minimalista" href="{{ url_for('ver_resenas_maestro', nombre=maestro) }}">{{ maestro }}</a></li>
             {% endfor %}
         </ul>
     </div>
-    
     </main>
 </body>
 </html>
