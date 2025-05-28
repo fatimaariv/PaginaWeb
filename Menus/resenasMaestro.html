@@ -57,7 +57,15 @@
                         {% endif %}
 
                     </li>
+                    <p> {{ rol }}</p>
 
+
+
+{% if session['rol'] == 'Administrador' %}
+<li class="dropdown">
+    <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
+</li>
+{% endif %}
                     
                 </ul>
             </nav>

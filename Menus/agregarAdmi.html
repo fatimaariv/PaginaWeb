@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admistyle.css') }}">
 </head>
 <body>
     <header>
@@ -50,11 +51,9 @@
                     <li class="dropdown">
                         <a class="menu-button" href="{{ url_for('agregar_resena') }}">Agregar reseña</a>
                     </li>
-                    {% if rol == 'Administrador' %}
-                        <li class="dropdown">
+                    <li class="dropdown">
                             <a class="menu-button" href="{{ url_for('agregar_admi') }}">+Admi</a>
                         </li>
-                    {% endif %}
     
                 </ul>
             </nav>
@@ -66,28 +65,23 @@
                     <li><p>{{ session['usuario'] }}</p></li>
                     <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
                 </ul>
-            </div>
-            
+            </div> 
             {% else %}
                 <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
             {% endif %}
     </header>
 
-    <main>
-        <h1>Agregar administrador</h1>
-    <form method="POST" action="/agregar_admin">
-        <label>Usuario:</label>
-        <input type="text" name="usuario" required>
-
-        <label>Contraseña:</label>
-        <input type="password" name="password" required>
-
-        <label>Confirma tu contraseña:</label>
-        <input type="password" name="confirm_password" required>
-
-        <button type="submit">Guardar datos</button>
+    <main >
+    <div class="admin-container">
+    <h1 class="admin-form-title">Agregar administrador</h1>
+    <form method="POST" action="/agregar_admin" class="admin-form">
+        <input type="text" name="usuario" placeholder="Usuario:" class="admin-input" required>
+        <input type="password" name="password" placeholder="Contraseña:" class="admin-input" required>
+        <input type="password" name="confirm_password" placeholder="Confirma tu contraseña:" class="admin-input" required>
+        <input type="submit" value="Guardar datos" class="admin-submit">
     </form>
-    </main>
+    </div>
+</main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>

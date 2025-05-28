@@ -197,6 +197,7 @@ def login_post():
 
     if usuario and check_password_hash(usuario['contraseña'], password):
         session['usuario'] = usuario['NomUsuario']
+        session['idUsuario'] = usuario['idUsuario']  # ✅ Aquí lo agregas
         session['rol'] = usuario['NomRol']
         if usuario['NomRol'] == 'Administrador':
             return redirect('/admin')
