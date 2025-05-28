@@ -431,29 +431,65 @@ conexion = mysql.connector.connect(
 )
 cursor = conexion.cursor()
 
+# ------------------ FUNCION PARA AGREGAR ADMINISTRADORES ------------------
 @app.route('/agregar_admin', methods=['GET', 'POST'])
 def agregar_admin():
     if request.method == 'POST':
-        usuario = request.form['usuario']
+        usuario = request.form['usuario'].strip()
         password = request.form['password']
         confirm = request.form['confirm_password']
 
+        # Validación de contraseñas
         if password != confirm:
-            flash('Las contraseñas no coinciden.')
+            flash('❌ Las contraseñas no coinciden.')
             return redirect('/agregar_admin')
 
+        # Verificar si el usuario ya existe
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="f7t4m7DAR_",
+            database="PagWeb"
+        )
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT * FROM usuarios WHERE NomUsuario = %s", (usuario,))
+        existente = cursor.fetchone()
+        if existente:
+            flash('⚠️ Este nombre de usuario ya está registrado.')
+            conexion.close()
+            return redirect('/agregar_admin')
+
+        # Hash de la contraseña
         hashed_password = generate_password_hash(password)
 
         try:
-            cursor.execute("INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES (%s, %s, %s)",
-            (usuario, hashed_password, 2))  # idRol 2 = administrador
+            # Obtener el id del rol "Administrador"
+            cursor.execute("SELECT idRol FROM Roles WHERE NomRol = 'Administrador'")
+            id_rol = cursor.fetchone()
+            if not id_rol:
+                flash("⚠️ No existe el rol 'Administrador' en la base de datos.")
+                conexion.close()
+                return redirect('/agregar_admin')
+
+            # Insertar nuevo administrador
+            cursor.execute("""
+                INSERT INTO usuarios (NomUsuario, contraseña, idRol) 
+                VALUES (%s, %s, %s)
+            """, (usuario, hashed_password, id_rol[0]))
             conexion.commit()
-            flash('Administrador agregado exitosamente.')
+            flash('✅ Administrador agregado exitosamente.')
         except Exception as e:
-            flash(f'Error: {e}')
+            conexion.rollback()
+            flash(f'❌ Error al agregar administrador: {str(e)}')
+        finally:
+            conexion.close()
+
         return redirect('/agregar_admin')
 
     return render_template('agregarAdmi.html')
+
+#-----------------------------------------------------------------------------------------
 
 
 usuario = 'Angel'
