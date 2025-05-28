@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='admistyle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='diseño+Admi.css') }}">
 </head>
 <body>
     <header>
@@ -19,7 +19,7 @@
         
         <div class="menu">
             <nav>
-                                <ul class="nav-menu">
+                <ul class="nav-menu">
                     <li>
                         <a class="menu-button" href="{{ url_for('inicio') }}">Inicio</a>
                     </li>
@@ -73,13 +73,14 @@
 
     <main >
     <div class="admin-container">
-    <h1 class="admin-form-title">Agregar administrador</h1>
-    <form method="POST" action="/agregar_admin" class="admin-form">
-        <input type="text" name="usuario" placeholder="Usuario:" class="admin-input" required>
-        <input type="password" name="password" placeholder="Contraseña:" class="admin-input" required>
-        <input type="password" name="confirm_password" placeholder="Confirma tu contraseña:" class="admin-input" required>
-        <input type="submit" value="Guardar datos" class="admin-submit">
-    </form>
+        <h1 class="admin-form-title">Agregar administrador</h1>
+            <form method="POST" action="/agregar_admin" class="formulario">
+                <input type="text" name="usuario" placeholder="Usuario:" class="admin-input" required>
+                <input type="password" name="password" placeholder="Contraseña:" class="admin-input" required>
+                <input type="password" name="confirm_password" placeholder="Confirma tu contraseña:" class="admin-input" required>
+                <input type="submit" value="Guardar datos" class="admin-submit">
+            </form>
+    
     </div>
 </main>
 </body>

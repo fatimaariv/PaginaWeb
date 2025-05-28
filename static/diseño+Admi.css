@@ -1,0 +1,31 @@
+.admin-container {
+    background-color: #33290b;
+    padding: 20px;
+    border-radius: 20px;
+    width: 500px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    margin-top: 100px;
+    margin-left: 400px;
+}
+
+.admin-container h1{
+    font-size: 35px;
+    text-align: center;
+    margin: 3px;
+}
+
+.formulario{
+    text-align: center;
+}
+.formulario input{
+    align-content: center;
+    font-size: 23px;
+    margin: 10px;
+    background-color: #363227;
+    color: rgb(201, 201, 200);
+}
+
+.formulario .admin-submit{
+    background-color: #c0c0bf;
+    color: black;
+}
