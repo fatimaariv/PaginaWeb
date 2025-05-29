@@ -70,24 +70,25 @@
                 <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
             {% endif %}
     </header>
-    <h1>Todas las peticiones hechas por los estudiantes</h1>
+    <main>
+        <h1>Todas las peticiones hechas por los estudiantes</h1>
     
-    {% for p in peticiones %}
-        <div class="peticion-box">
-            <div class="peticion-header">👤 {{ p.NomUsuario }} — Petición para {{ 'materia' if p.Nom_Peticion == 'Estudiante' else 'maestro' }}</div>
-            <p><strong>{{ 'Materia:' if p.idRol_Peticion == 1 else 'Maestro:' }}</strong> {{ p.peticion }}</p>
-            
-            <div class="botones">
-                <form method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}" style="display:inline;">
-                    <button class="btn btn-aceptar" type="submit">Aceptar</button>
-                </form>
-                <form method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}" style="display:inline;">
-                    <button class="btn btn-denegar" type="submit">Denegar</button>
-                </form>
+        {% for p in peticiones %}
+            <div class="peticion-box">
+                <div class="peticion-header">👤 {{ p.NomUsuario }} — Petición para {{ 'materia' if p.Nom_Peticion == 'Estudiante' else 'maestro' }}</div>
+                <p><strong>{{ 'Materia:' if p.idRol_Peticion == 1 else 'Maestro:' }}</strong> {{ p.peticion }}</p>
+        
+                <div class="botones">
+                    <form method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}" style="display:inline;">
+                        <button class="btn btn-aceptar" type="submit">Aceptar</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}" style="display:inline;">
+                        <button class="btn btn-denegar" type="submit">Denegar</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    {% endfor %}
-
+        {% endfor %}
+    </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>
