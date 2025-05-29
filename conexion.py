@@ -498,24 +498,33 @@ hash = generate_password_hash(contraseña)
 
 print(f"INSERT INTO usuarios (NomUsuario, contraseña, idRol) VALUES ('{usuario}', '{hash}', 2);")
 
+#----------------------------PETCIONES ADMINISTRADOR------------------------------------
 @app.route('/ver_peticiones')
 def ver_peticiones():
-    cursor = db.cursor(dictionary=True)
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
     query = """
-        SELECT p.idPeticion, p.peticion, u.NomUsuario, t.Nom_Peticion 
+        SELECT 
+            p.idPeticion AS id,
+            p.peticion AS texto,
+            u.NomUsuario AS usuario,
+            t.Nom_Peticion AS tipo 
         FROM peticiones p
         JOIN usuarios u ON p.idUsuario = u.idUsuario
         JOIN Tipo_Peticion t ON p.idRol_Peticion = t.idRol_Peticion;
     """
     cursor.execute(query)
     peticiones = cursor.fetchall()
-    return render_template('ver_peticiones.html', peticiones=peticiones)
+    print("Peticiones cargadas:", peticiones)
+    conexion.close()
+    return render_template('peticion.html', peticiones=peticiones)
+
 
 @app.route('/aceptar_peticion/<int:id>', methods=['POST'])
 def aceptar_peticion(id):
-    cursor = db.cursor(dictionary=True)
+    conexion = obtener_conexion()
+    cursor = conexion.cursor(dictionary=True)
 
-    # Obtener contenido de la petición
     cursor.execute("""
         SELECT peticion, idRol_Peticion FROM peticiones WHERE idPeticion = %s
     """, (id,))
@@ -531,17 +540,23 @@ def aceptar_peticion(id):
             cursor.execute("INSERT INTO maestros (nombreMaestro) VALUES (%s)", (texto,))
 
         cursor.execute("DELETE FROM peticiones WHERE idPeticion = %s", (id,))
-        db.commit()
+        conexion.commit()
 
+    conexion.close()
     return redirect(url_for('ver_peticiones'))
-
 
 @app.route('/denegar_peticion/<int:id>', methods=['POST'])
 def denegar_peticion(id):
-    cursor = db.cursor()
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
     cursor.execute("DELETE FROM peticiones WHERE idPeticion = %s", (id,))
-    db.commit()
+    conexion.commit()
+
+    conexion.close()
     return redirect(url_for('ver_peticiones'))
+
+#----------------------------------------------------------------------------------
 
 @app.route('/reportar/<int:id_resena>', methods=['POST'])
 def reportar_resena(id_resena):

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>OSOS</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='diseñopeticion.css') }}">
 </head>
 <body>
     <header>
@@ -73,21 +74,25 @@
     <main>
         <h1>Todas las peticiones hechas por los estudiantes</h1>
     
-        {% for p in peticiones %}
-            <div class="peticion-box">
-                <div class="peticion-header">👤 {{ p.NomUsuario }} — Petición para {{ 'materia' if p.Nom_Peticion == 'Estudiante' else 'maestro' }}</div>
-                <p><strong>{{ 'Materia:' if p.idRol_Peticion == 1 else 'Maestro:' }}</strong> {{ p.peticion }}</p>
-        
-                <div class="botones">
-                    <form method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}" style="display:inline;">
-                        <button class="btn btn-aceptar" type="submit">Aceptar</button>
+        {% if peticiones %}
+            {% for p in peticiones %}
+                <div class="peticion">
+                    <p class="usuario"><strong>Usuario:</strong> {{ p.NomUsuario }}</p>
+                    <p class="tipo"><strong>Tipo:</strong> {{ p.Nom_Peticion }}</p>
+                    <p class="texto"><strong>Texto:</strong> {{ p.peticion }}</p>
+
+                    <form class="form-aceptar" method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}">
+                        <button class="btn aceptar" type="submit">Aceptar</button>
                     </form>
-                    <form method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}" style="display:inline;">
-                        <button class="btn btn-denegar" type="submit">Denegar</button>
+                    <form class="form-denegar" method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}">
+                        <button class="btn denegar" type="submit">Denegar</button>
                     </form>
+                    <hr>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p class="peticion">No hay peticiones por mostrar.</p>
+        {% endif %}
     </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>

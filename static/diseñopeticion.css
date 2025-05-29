@@ -1,0 +1,52 @@
+main h1{
+    font-size: 30px;
+    margin-top: 25px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    color: rgb(198, 201, 204);
+}
+.peticion {
+    background-color: #3b2f16;
+    color: white;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.usuario,
+.tipo,
+.texto {
+    margin: 4px 0;
+    font-size: 1rem;
+}
+
+.texto {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.form-aceptar,
+.form-denegar {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn.aceptar {
+    background-color: #146414;
+}
+
+.btn.denegar {
+    background-color: #b10000;
+}
