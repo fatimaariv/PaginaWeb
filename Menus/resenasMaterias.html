@@ -70,36 +70,32 @@
     </header>
     <main>
         <h1 class="titlereseña">Reseñas para la materia: {{ nombre_materia }}</h1>
-    <section class="resenas">
-    {% if reseñas %}
-        {% for reseña in reseñas %}
-            <div class="tarjeta-resena">
-                <div class="resena-usuario">
-                    <span class="usuario">👤 {{ reseña.NomUsuario }}</span>
-                    <span class="materia">Materia: {{ nombre_materia }}</span>
-                    <span class="profesor">Profesor: {{ reseña.nombreMaestro }}</span>
-                </div>
-                <p class="texto-resena">{{ reseña.comentario }}</p>
-                <div class="interaccion">
-                    <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
-                <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
-                    <span class="calificacion">Calificación:
-                        <span class="estrellas">
-                            {{ "★" * reseña.calificacion }}{{ "☆" * (5 - reseña.calificacion) }}
-                        </span>
-                    </span>
-                    <span class="alerta">❗</span>
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="sin-resenas">No hay reseñas para esta materia.</p>
-    {% endif %}
-</section>
-
-
+        <section class="resenas">
+            {% if reseñas %}
+                {% for reseña in reseñas %}
+                    <div class="tarjeta-resena">
+                        <div class="resena-usuario">
+                            <span class="usuario">👤 {{ reseña.NomUsuario }}</span>
+                            <span class="materia">Materia: {{ nombre_materia }}</span>
+                            <span class="profesor">Profesor: {{ reseña.nombreMaestro }}</span>
+                        </div>
+                        <p class="texto-resena">{{ reseña.comentario }}</p>
+                        <div class="interaccion">
+                            <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                            <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
+                            <span class="calificacion">Calificación:
+                                <span class="estrellas">
+                                  {{ "★" * reseña.calificacion }}{{ "☆" * (5 - reseña.calificacion) }}
+                                </span>
+                            </span>
+                            <span class="alerta">❗</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="sin-resenas">No hay reseñas para esta materia.</p>
+            {% endif %}
+        </section>
     </main>
-    
-
 </body>
 </html>

@@ -64,10 +64,9 @@
                     <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
                 </ul>
             </div>
-            
-            {% else %}
-                <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
-            {% endif %}
+        {% else %}
+            <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
+        {% endif %}
     </header>
 
     <main>

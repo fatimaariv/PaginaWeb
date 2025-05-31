@@ -37,7 +37,7 @@
                         {% else %}
                             <a class="menu-button" href="#">Agregar reseña</a>
                             <div class="submenu">
-                            <p>Necesitas iniciar sesión</p>
+                                <p>Necesitas iniciar sesión</p>
                             </div>
                         {% endif %}
                     </li>
@@ -58,31 +58,30 @@
                 </ul>
             </nav>
         </div>
-        {% if 'usuario' in session and 'rol' in session %}
-            <div class="user-info">
-                <ul>
-                    <li><p>{{ session['rol'] }}</p></li>
-                    <li><p>{{ session['usuario'] }}</p></li>
-                    <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
-                </ul>
-            </div> 
+            {% if 'usuario' in session and 'rol' in session %}
+                <div class="user-info">
+                    <ul>
+                        <li><p>{{ session['rol'] }}</p></li>
+                        <li><p>{{ session['usuario'] }}</p></li>
+                        <li class="logout-item"><a href="{{ url_for('logout') }}" class="login-btn">Cerrar sesión</a></li>
+                    </ul>
+                </div> 
             {% else %}
                 <a href="{{ url_for('inicio_sesion') }}" class="login-btn">Iniciar sesión</a>
             {% endif %}
     </header>
 
-    <main >
-    <div class="admin-container">
-        <h1 class="admin-form-title">Agregar administrador</h1>
-            <form method="POST" action="/agregar_admin" class="formulario">
-                <input type="text" name="usuario" placeholder="Usuario:" class="admin-input" required>
-                <input type="password" name="password" placeholder="Contraseña:" class="admin-input" required>
-                <input type="password" name="confirm_password" placeholder="Confirma tu contraseña:" class="admin-input" required>
-                <input type="submit" value="Guardar datos" class="admin-submit">
-            </form>
-    
-    </div>
-</main>
+    <main>
+        <div class="admin-container">
+            <h1 class="admin-form-title">Agregar administrador</h1>
+                <form method="POST" action="/agregar_admin" class="formulario">
+                    <input type="text" name="usuario" placeholder="Usuario:" class="admin-input" required>
+                    <input type="password" name="password" placeholder="Contraseña:" class="admin-input" required>
+                    <input type="password" name="confirm_password" placeholder="Confirma tu contraseña:" class="admin-input" required>
+                    <input type="submit" value="Guardar datos" class="admin-submit">
+                </form>
+        </div>
+    </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>
 </html>

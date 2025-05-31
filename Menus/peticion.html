@@ -74,25 +74,25 @@
     <main>
         <h1>Todas las peticiones hechas por los estudiantes</h1>
     
-        {% if peticiones %}
-            {% for p in peticiones %}
-                <div class="peticion">
-                    <p class="usuario"><strong>Usuario:</strong> {{ p.NomUsuario }}</p>
-                    <p class="tipo"><strong>Tipo:</strong> {{ p.Nom_Peticion }}</p>
-                    <p class="texto"><strong>Texto:</strong> {{ p.peticion }}</p>
+            {% if peticiones %}
+                {% for p in peticiones %}
+                    <div class="peticion">
+                        <p class="usuario"><strong>Usuario:</strong> {{ p.NomUsuario }}</p>
+                        <p class="tipo"><strong>Tipo:</strong> {{ p.Nom_Peticion }}</p>
+                        <p class="texto"><strong>Texto:</strong> {{ p.peticion }}</p>
 
-                    <form class="form-aceptar" method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}">
-                        <button class="btn aceptar" type="submit">Aceptar</button>
-                    </form>
-                    <form class="form-denegar" method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}">
-                        <button class="btn denegar" type="submit">Denegar</button>
-                    </form>
-                    <hr>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="peticion">No hay peticiones por mostrar.</p>
-        {% endif %}
+                        <form class="form-aceptar" method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}">
+                            <button class="btn aceptar" type="submit">Aceptar</button>
+                        </form>
+                        <form class="form-denegar" method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}">
+                            <button class="btn denegar" type="submit">Denegar</button>
+                        </form>
+                        <hr>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="peticion">No hay peticiones por mostrar.</p>
+            {% endif %}
     </main>
 </body>
     <script src="{{ url_for('static', filename='menu.js') }}"></script>

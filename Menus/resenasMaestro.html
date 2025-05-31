@@ -71,36 +71,30 @@
     </header>
     <main>
         <h1 class="titlereseña">Reseñas del maestro: {{ nombre }}</h1>
-        
         <section class="resenas">
-    {% for comentario, calificacion, usuario, materia in resenas %}
-        <div class="tarjeta-resena">
-            <div class="resena-usuario">
-                <span class="usuario">👤 {{ usuario }}</span>
-                <span class="materia">Materia: {{ materia }}</span>
-                <span class="profesor">Profesor: {{ nombre }}</span>
-            </div>
-            <p class="texto-resena">{{ comentario }}</p>
-            <div class="interaccion">
-                <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
-                <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
-                <span class="calificacion">Calificación:
-                    <span class="estrellas">
-                        {{ "★" * calificacion }}{{ "☆" * (5 - calificacion) }}
-                    </span>
-                </span>
-                <span class="alerta">❗</span>
-            </div>
-        </div>
-    {% else %}
-        <p class="sin-resenas">No hay reseñas disponibles para este maestro aún.</p>
-    {% endfor %}
-</section>
-
-    
-</body>
+            {% for comentario, calificacion, usuario, materia in resenas %}
+                <div class="tarjeta-resena">
+                    <div class="resena-usuario">
+                        <span class="usuario">👤 {{ usuario }}</span>
+                        <span class="materia">Materia: {{ materia }}</span>
+                        <span class="profesor">Profesor: {{ nombre }}</span>
+                    </div>
+                    <p class="texto-resena">{{ comentario }}</p>
+                    <div class="interaccion">
+                        <span class="likes" onclick="votar(this, 'like')">👍 <span class="like-count">0</span></span>
+                        <span class="dislikes" onclick="votar(this, 'dislike')">👎 <span class="dislike-count">0</span></span>
+                        <span class="calificacion">Calificación:
+                            <span class="estrellas">
+                                 {{ "★" * calificacion }}{{ "☆" * (5 - calificacion) }}
+                            </span>
+                        </span>
+                        <span class="alerta">❗</span>
+                    </div>
+                </div>
+            {% else %}
+                <p class="sin-resenas">No hay reseñas disponibles para este maestro aún.</p>
+            {% endfor %}
+        </section>
     </main>
-    
 </body>
-
 </html>

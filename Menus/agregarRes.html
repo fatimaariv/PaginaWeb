@@ -75,22 +75,23 @@
     <main>
         <form method="POST" action="/guardar-resena" class="formulario">
             <label for="materia">Selecciona una materia:</label>
-            <select name="materia" id="materia" required>
-                <option value="">-- Elige una materia --</option>
-                {% for materia in materias %}
-                    <option value="{{ materia.idMateria }}">{{ materia.nombreMateria }}</option>
-                {% endfor %}
-            </select>
+                <select name="materia" id="materia" required>
+                    <option value="">-- Elige una materia --</option>
+                        {% for materia in materias %}
+                            <option value="{{ materia.idMateria }}">{{ materia.nombreMateria }}</option>
+                        {% endfor %}
+                </select>
 
             <label for="maestro">Selecciona un maestro:</label>
-            <select name="maestro" id="maestro" required>
-            <option value="">-- Elige un maestro --</option>
-            </select>
+                <select name="maestro" id="maestro" required>
+                    <option value="">-- Elige un maestro --</option>
+                </select>
 
             <label for="comentario">Comentario:</label>
-            <textarea name="comentario" required></textarea>
+                <textarea name="comentario" required></textarea>
+
             <label for="calificacion">Calificación (1 a 5):</label>
-            <input type="number" name="calificacion" min="1" max="5" required>
+                <input type="number" name="calificacion" min="1" max="5" required>
 
             <button type="submit">Enviar reseña</button>
         </form>
