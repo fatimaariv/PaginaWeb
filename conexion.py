@@ -248,11 +248,6 @@ def register_post():
     flash("Registro exitoso, ahora puedes iniciar sesión.")
     return redirect('/login')
 
-
-@app.route('/peticion')
-def mostrar_peticion():
-    return render_template('peticion.html')
-
 @app.route('/logout')
 def logout():
     session.clear()

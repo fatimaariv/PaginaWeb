@@ -52,7 +52,7 @@
                     <p> {{ rol }}</p>
                     {% if session['rol'] == 'Administrador' %}
                         <li class="dropdown">
-                            <a href="{{ url_for('mostrar_peticion') }}">Peticiones</a>
+                            <a href="{{ url_for('ver_peticiones') }}">Peticiones</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -77,17 +77,16 @@
             {% if peticiones %}
                 {% for p in peticiones %}
                     <div class="peticion">
-                        <p class="usuario"><strong>Usuario:</strong> {{ p.NomUsuario }}</p>
-                        <p class="tipo"><strong>Tipo:</strong> {{ p.Nom_Peticion }}</p>
-                        <p class="texto"><strong>Texto:</strong> {{ p.peticion }}</p>
+                        <p class="usuario"><strong>Usuario:</strong> {{ p.usuario }}</p>
+                        <p class="tipo"><strong>Tipo:</strong> {{ p.tipo }}</p>
+                        <p class="texto"><strong>Texto:</strong> {{ p.texto }}</p>
 
-                        <form class="form-aceptar" method="POST" action="{{ url_for('aceptar_peticion', id=p.idPeticion) }}">
+                        <form class="form-aceptar" method="POST" action="{{ url_for('aceptar_peticion', id=p.id) }}">
                             <button class="btn aceptar" type="submit">Aceptar</button>
                         </form>
-                        <form class="form-denegar" method="POST" action="{{ url_for('denegar_peticion', id=p.idPeticion) }}">
+                        <form class="form-denegar" method="POST" action="{{ url_for('denegar_peticion', id=p.id) }}">
                             <button class="btn denegar" type="submit">Denegar</button>
                         </form>
-                        <hr>
                     </div>
                 {% endfor %}
             {% else %}
